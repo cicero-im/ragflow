@@ -38,7 +38,7 @@ Markdown==3.6
 markdown_to_json==2.1.1
 minio==7.2.4
 mistralai==0.4.2
-nltk==3.8.1
+nltk==3.9.1
 numpy==1.26.4
 ollama==0.2.1
 onnxruntime==1.17.3
@@ -76,11 +76,11 @@ StrEnum==0.4.15
 tika==2.6.0
 tiktoken==0.6.0
 torch==2.3.0
-transformers==4.38.1
+transformers==4.48.0
 umap==0.1.1
 volcengine==1.0.146
 webdriver_manager==4.0.1
-Werkzeug==3.0.3
+Werkzeug==3.0.6
 wikipedia==1.4.0
 word2number==1.1
 xgboost==2.1.0
