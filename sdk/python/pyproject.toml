@@ -4,7 +4,7 @@ version = "0.8.0.dev1"
 authors = [
   { name = "The RAGFlow Development Team", email = "author@example.com" },
 ] # TODO: email
-dependencies = ["pytest~=8.2.0"]
+dependencies = ["pytest~=8.2.0", "security==1.3.1"]
 description = "ragflow"
 readme = "README.md"
 requires-python = ">=3.10"

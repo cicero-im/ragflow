@@ -22,7 +22,6 @@ import pickle
 import socket
 import time
 import uuid
-import requests
 from enum import Enum, IntEnum
 import importlib
 from Cryptodome.PublicKey import RSA
@@ -31,6 +30,7 @@ from Cryptodome.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
 from filelock import FileLock
 
 from . import file_utils
+from security import safe_requests
 
 SERVICE_CONF = "service_conf.yaml"
 
@@ -340,7 +340,7 @@ def decrypt(line):
 def download_img(url):
     if not url:
         return ""
-    response = requests.get(url)
+    response = safe_requests.get(url)
     return "data:" + \
            response.headers.get('Content-Type', 'image/jpg') + ";" + \
            "base64," + base64.b64encode(response.content).decode("utf-8")
