@@ -37,7 +37,7 @@ class RAGFlow:
         """
         name: dataset name
         """
-        res = requests.post(url=self.dataset_url, json={"name": dataset_name}, headers=self.authorization_header)
+        res = requests.post(url=self.dataset_url, json={"name": dataset_name}, headers=self.authorization_header, timeout=60)
         result_dict = json.loads(res.text)
         return result_dict
 
@@ -45,11 +45,11 @@ class RAGFlow:
         dataset_id = self.find_dataset_id_by_name(dataset_name)
 
         endpoint = f"{self.dataset_url}/{dataset_id}"
-        res = requests.delete(endpoint, headers=self.authorization_header)
+        res = requests.delete(endpoint, headers=self.authorization_header, timeout=60)
         return res.json()
 
     def find_dataset_id_by_name(self, dataset_name):
-        res = requests.get(self.dataset_url, headers=self.authorization_header)
+        res = requests.get(self.dataset_url, headers=self.authorization_header, timeout=60)
         for dataset in res.json()["data"]:
             if dataset["name"] == dataset_name:
                 return dataset["id"]
@@ -62,20 +62,20 @@ class RAGFlow:
             "orderby": orderby,
             "desc": desc
         }
-        response = requests.get(url=self.dataset_url, params=params, headers=self.authorization_header)
+        response = requests.get(url=self.dataset_url, params=params, headers=self.authorization_header, timeout=60)
         return response.json()
 
     def get_dataset(self, dataset_name):
         dataset_id = self.find_dataset_id_by_name(dataset_name)
         endpoint = f"{self.dataset_url}/{dataset_id}"
-        response = requests.get(endpoint, headers=self.authorization_header)
+        response = requests.get(endpoint, headers=self.authorization_header, timeout=60)
         return response.json()
 
     def update_dataset(self, dataset_name, **params):
         dataset_id = self.find_dataset_id_by_name(dataset_name)
 
         endpoint = f"{self.dataset_url}/{dataset_id}"
-        response = requests.put(endpoint, json=params, headers=self.authorization_header)
+        response = requests.put(endpoint, json=params, headers=self.authorization_header, timeout=60)
         return response.json()
 
 # ------------------------------- CONTENT MANAGEMENT -----------------------------------------------------
@@ -95,7 +95,7 @@ class RAGFlow:
                 return {"code": RetCode.DATA_ERROR, "message": f"The file {file_path} does not exist"}
 
         res = requests.request("POST", url=f"{self.dataset_url}/{dataset_id}/documents", files=files,
-                               headers=self.authorization_header)
+                               headers=self.authorization_header, timeout=60)
 
         result_dict = json.loads(res.text)
         return result_dict
@@ -103,7 +103,7 @@ class RAGFlow:
     # ----------------------------delete a file-----------------------------------------------------
     def delete_files(self, document_id, dataset_id):
         endpoint = f"{self.dataset_url}/{dataset_id}/documents/{document_id}"
-        res = requests.delete(endpoint, headers=self.authorization_header)
+        res = requests.delete(endpoint, headers=self.authorization_header, timeout=60)
         return res.json()
 
     # ----------------------------list files-----------------------------------------------------
@@ -116,19 +116,19 @@ class RAGFlow:
             "keywords": keywords
         }
         endpoint = f"{self.dataset_url}/{dataset_id}/documents/"
-        res = requests.get(endpoint, params=params, headers=self.authorization_header)
+        res = requests.get(endpoint, params=params, headers=self.authorization_header, timeout=60)
         return res.json()
 
     # ----------------------------update files: enable, rename, template_type-------------------------------------------
     def update_file(self, dataset_id, document_id, **params):
         endpoint = f"{self.dataset_url}/{dataset_id}/documents/{document_id}"
-        response = requests.put(endpoint, json=params, headers=self.authorization_header)
+        response = requests.put(endpoint, json=params, headers=self.authorization_header, timeout=60)
         return response.json()
 
     # ----------------------------download a file-----------------------------------------------------
     def download_file(self, dataset_id, document_id):
         endpoint = f"{self.dataset_url}/{dataset_id}/documents/{document_id}"
-        res = requests.get(endpoint, headers=self.authorization_header)
+        res = requests.get(endpoint, headers=self.authorization_header, timeout=60)
 
         content = res.content  # binary data
         # decode the binary data
@@ -146,33 +146,33 @@ class RAGFlow:
     # ----------------------------start parsing-----------------------------------------------------
     def start_parsing_document(self, dataset_id, document_id):
         endpoint = f"{self.dataset_url}/{dataset_id}/documents/{document_id}/status"
-        res = requests.post(endpoint, headers=self.authorization_header)
+        res = requests.post(endpoint, headers=self.authorization_header, timeout=60)
 
         return res.json()
 
     def start_parsing_documents(self, dataset_id, doc_ids=None):
         endpoint = f"{self.dataset_url}/{dataset_id}/documents/status"
-        res = requests.post(endpoint, headers=self.authorization_header, json={"doc_ids": doc_ids})
+        res = requests.post(endpoint, headers=self.authorization_header, json={"doc_ids": doc_ids}, timeout=60)
 
         return res.json()
 
     # ----------------------------stop parsing-----------------------------------------------------
     def stop_parsing_document(self, dataset_id, document_id):
         endpoint = f"{self.dataset_url}/{dataset_id}/documents/{document_id}/status"
-        res = requests.delete(endpoint, headers=self.authorization_header)
+        res = requests.delete(endpoint, headers=self.authorization_header, timeout=60)
 
         return res.json()
 
     def stop_parsing_documents(self, dataset_id, doc_ids=None):
         endpoint = f"{self.dataset_url}/{dataset_id}/documents/status"
-        res = requests.delete(endpoint, headers=self.authorization_header, json={"doc_ids": doc_ids})
+        res = requests.delete(endpoint, headers=self.authorization_header, json={"doc_ids": doc_ids}, timeout=60)
 
         return res.json()
 
     # ----------------------------show the status of the file-----------------------------------------------------
     def show_parsing_status(self, dataset_id, document_id):
         endpoint = f"{self.dataset_url}/{dataset_id}/documents/{document_id}/status"
-        res = requests.get(endpoint, headers=self.authorization_header)
+        res = requests.get(endpoint, headers=self.authorization_header, timeout=60)
 
         return res.json()
     # ----------------------------list the chunks of the file-----------------------------------------------------

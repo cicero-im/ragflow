@@ -340,7 +340,7 @@ def decrypt(line):
 def download_img(url):
     if not url:
         return ""
-    response = requests.get(url)
+    response = requests.get(url, timeout=60)
     return "data:" + \
            response.headers.get('Content-Type', 'image/jpg') + ";" + \
            "base64," + base64.b64encode(response.content).decode("utf-8")

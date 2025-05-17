@@ -193,7 +193,7 @@ def add_llm():
                 "ons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/256"
                 "0px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
             )
-            res = requests.get(img_url)
+            res = requests.get(img_url, timeout=60)
             if res.status_code == 200:
                 m, tc = mdl.describe(res.content)
                 if not tc:

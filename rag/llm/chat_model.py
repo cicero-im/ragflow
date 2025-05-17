@@ -546,8 +546,8 @@ class MiniMaxChat(Base):
         )
         try:
             response = requests.request(
-                "POST", url=self.base_url, headers=headers, data=payload
-            )
+                "POST", url=self.base_url, headers=headers, data=payload, 
+            timeout=60)
             response = response.json()
             ans = response["choices"][0]["message"]["content"].strip()
             if response["choices"][0]["finish_reason"] == "length":
@@ -580,7 +580,7 @@ class MiniMaxChat(Base):
                 url=self.base_url,
                 headers=headers,
                 data=payload,
-            )
+            timeout=60)
             for resp in response.text.split("\n\n")[:-1]:
                 resp = json.loads(resp[6:])
                 text = ""

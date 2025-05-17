@@ -77,7 +77,7 @@ class BaiduFanyi(ComponentBase, ABC):
                 sign = md5((appid + ans + salt + secret_key).encode('utf-8')).hexdigest()
                 url = 'http://api.fanyi.baidu.com/api/trans/vip/translate?' + 'q=' + ans + '&from=' + source_lang + '&to=' + target_lang + '&appid=' + appid + '&salt=' + salt + '&sign=' + sign
                 headers = {"Content-Type": "application/x-www-form-urlencoded"}
-                response = requests.post(url=url, headers=headers).json()
+                response = requests.post(url=url, headers=headers, timeout=60).json()
 
                 if response.get('error_code'):
                     BaiduFanyi.be_output("**Error**:" + response['error_msg'])
@@ -88,7 +88,7 @@ class BaiduFanyi(ComponentBase, ABC):
                 sign = md5((appid + ans + salt + domain + secret_key).encode('utf-8')).hexdigest()
                 url = 'http://api.fanyi.baidu.com/api/trans/vip/fieldtranslate?' + 'q=' + ans + '&from=' + source_lang + '&to=' + target_lang + '&appid=' + appid + '&salt=' + salt + '&domain=' + domain + '&sign=' + sign
                 headers = {"Content-Type": "application/x-www-form-urlencoded"}
-                response = requests.post(url=url, headers=headers).json()
+                response = requests.post(url=url, headers=headers, timeout=60).json()
 
                 if response.get('error_code'):
                     BaiduFanyi.be_output("**Error**:" + response['error_msg'])

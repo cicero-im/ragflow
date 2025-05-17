@@ -77,7 +77,7 @@ def github_callback():
         "client_id": GITHUB_OAUTH.get("client_id"),
         "client_secret": GITHUB_OAUTH.get("secret_key"),
         "code": request.args.get('code')
-    }, headers={"Accept": "application/json"})
+    }, headers={"Accept": "application/json"}, timeout=60)
     res = res.json()
     if "error" in res:
         return redirect("/?error=%s" % res["error_description"])
@@ -130,7 +130,7 @@ def feishu_callback():
     app_access_token_res = requests.post(FEISHU_OAUTH.get("app_access_token_url"), data=json.dumps({
         "app_id": FEISHU_OAUTH.get("app_id"),
         "app_secret": FEISHU_OAUTH.get("app_secret")
-    }), headers={"Content-Type": "application/json; charset=utf-8"})
+    }), headers={"Content-Type": "application/json; charset=utf-8"}, timeout=60)
     app_access_token_res = app_access_token_res.json()
     if app_access_token_res['code'] != 0:
         return redirect("/?error=%s" % app_access_token_res)
@@ -139,7 +139,7 @@ def feishu_callback():
         "grant_type": FEISHU_OAUTH.get("grant_type"),
         "code": request.args.get('code')
     }), headers={"Content-Type": "application/json; charset=utf-8",
-                 'Authorization': f"Bearer {app_access_token_res['app_access_token']}"})
+                 'Authorization': f"Bearer {app_access_token_res['app_access_token']}"}, timeout=60)
     res = res.json()
     if res['code'] != 0:
         return redirect("/?error=%s" % res["message"])
@@ -191,7 +191,7 @@ def user_info_from_feishu(access_token):
                'Authorization': f"Bearer {access_token}"}
     res = requests.get(
         f"https://open.feishu.cn/open-apis/authen/v1/user_info",
-        headers=headers)
+        headers=headers, timeout=60)
     user_info = res.json()["data"]
     user_info["email"] = None if user_info.get("email") == "" else user_info["email"]
     return user_info
@@ -203,11 +203,11 @@ def user_info_from_github(access_token):
                'Authorization': f"token {access_token}"}
     res = requests.get(
         f"https://api.github.com/user?access_token={access_token}",
-        headers=headers)
+        headers=headers, timeout=60)
     user_info = res.json()
     email_info = requests.get(
         f"https://api.github.com/user/emails?access_token={access_token}",
-        headers=headers).json()
+        headers=headers, timeout=60).json()
     user_info["email"] = next(
         (email for email in email_info if email['primary'] == True),
         None)["email"]

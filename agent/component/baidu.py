@@ -49,7 +49,7 @@ class Baidu(ComponentBase, ABC):
             url = 'https://www.baidu.com/s?wd=' + ans + '&rn=' + str(self._param.top_n)
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36'}
-            response = requests.get(url=url, headers=headers)
+            response = requests.get(url=url, headers=headers, timeout=60)
 
             url_res = re.findall(r"'url': \\\"(.*?)\\\"}", response.text)
             title_res = re.findall(r"'title': \\\"(.*?)\\\",\\n", response.text)

@@ -50,7 +50,7 @@ async def on_message(message):
             await message.channel.send("Hi~ How can I help you? ")
         else:
             JSON_DATA['word']=message.content.split('> ')[1]
-            response = requests.post(URL, json=JSON_DATA)
+            response = requests.post(URL, json=JSON_DATA, timeout=60)
             response_data = response.json().get('data', [])
             image_bool = False
 

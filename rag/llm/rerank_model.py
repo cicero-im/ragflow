@@ -97,7 +97,7 @@ class JinaRerank(Base):
             "documents": texts,
             "top_n": len(texts)
         }
-        res = requests.post(self.base_url, headers=self.headers, json=data).json()
+        res = requests.post(self.base_url, headers=self.headers, json=data, timeout=60).json()
         return np.array([d["relevance_score"] for d in res["results"]]), res["usage"]["total_tokens"]
 
 
@@ -156,7 +156,7 @@ class XInferenceRerank(Base):
             "return_len": "true",
             "documents": texts
         }
-        res = requests.post(self.base_url, headers=self.headers, json=data).json()
+        res = requests.post(self.base_url, headers=self.headers, json=data, timeout=60).json()
         return np.array([d["relevance_score"] for d in res["results"]]), res["meta"]["tokens"]["input_tokens"]+res["meta"]["tokens"]["output_tokens"]
 
 
@@ -202,7 +202,7 @@ class NvidiaRerank(Base):
             "truncate": "END",
             "top_n": len(texts),
         }
-        res = requests.post(self.base_url, headers=self.headers, json=data).json()
+        res = requests.post(self.base_url, headers=self.headers, json=data, timeout=60).json()
         rank = np.array([d["logit"] for d in res["rankings"]])
         indexs = [d["index"] for d in res["rankings"]]
         return rank[indexs], token_count

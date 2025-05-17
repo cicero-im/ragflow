@@ -52,7 +52,7 @@ def remote_call(filename, binary):
         try:
             resume = requests.post(
                 "http://127.0.0.1:61670/tog",
-                data=json.dumps(q))
+                data=json.dumps(q), timeout=60)
             resume = resume.json()["response"]["results"]
             resume = refactor(resume)
             for k in ["education", "work", "project",

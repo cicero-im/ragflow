@@ -594,7 +594,7 @@ class NvidiaCV(Base):
                 "messages": self.prompt(b64),
                 "max_tokens": max_tokens,
             },
-        )
+        timeout=60)
         response = response.json()
         return (
             response["choices"][0]["message"]["content"].strip(),
