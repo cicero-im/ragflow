@@ -13,11 +13,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-import random
 from abc import ABC
 import requests
 from agent.component.base import ComponentBase, ComponentParamBase
 from hashlib import md5
+import secrets
 
 
 class BaiduFanyiParam(ComponentParamBase):
@@ -70,7 +70,7 @@ class BaiduFanyi(ComponentBase, ABC):
             source_lang = self._param.source_lang
             target_lang = self._param.target_lang
             appid = self._param.appid
-            salt = random.randint(32768, 65536)
+            salt = secrets.SystemRandom().randint(32768, 65536)
             secret_key = self._param.secret_key
 
             if self._param.trans_type == 'translate':

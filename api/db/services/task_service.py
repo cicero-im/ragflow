@@ -14,7 +14,6 @@
 #  limitations under the License.
 #
 import os
-import random
 
 from api.db.db_utils import bulk_insert_into_db
 from deepdoc.parser import PdfParser
@@ -29,6 +28,7 @@ from deepdoc.parser.excel_parser import RAGFlowExcelParser
 from rag.settings import SVR_QUEUE_NAME
 from rag.utils.minio_conn import MINIO
 from rag.utils.redis_conn import REDIS_CONN
+import secrets
 
 
 class TaskService(CommonService):
@@ -65,7 +65,7 @@ class TaskService(CommonService):
         if not docs: return []
 
         cls.model.update(progress_msg=cls.model.progress_msg + "\n" + "Task has been received.",
-                         progress=random.random() / 10.).where(
+                         progress=secrets.SystemRandom().random() / 10.).where(
             cls.model.id == docs[0]["id"]).execute()
         return docs
 

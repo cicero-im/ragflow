@@ -14,7 +14,6 @@
 #  limitations under the License.
 #
 import json
-import random
 import time
 from functools import wraps
 from io import BytesIO
@@ -37,6 +36,7 @@ from uuid import uuid1
 from base64 import b64encode
 from hmac import HMAC
 from urllib.parse import quote, urlencode
+import secrets
 
 requests.models.complexjson.dumps = functools.partial(
     json.dumps, cls=CustomJSONEncoder)
@@ -89,7 +89,7 @@ def get_exponential_backoff_interval(retries, full_jitter=False):
     # Full jitter according to
     # https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
     if full_jitter:
-        countdown = random.randrange(countdown + 1)
+        countdown = secrets.SystemRandom().randrange(countdown + 1)
     # Adjust according to maximum wait time and account for negative values.
     return max(0, countdown)
 

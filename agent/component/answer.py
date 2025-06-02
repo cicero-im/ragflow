@@ -13,13 +13,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-import random
 from abc import ABC
 from functools import partial
 
 import pandas as pd
 
 from agent.component.base import ComponentBase, ComponentParamBase
+import secrets
 
 
 class AnswerParam(ComponentParamBase):
@@ -44,7 +44,7 @@ class Answer(ComponentBase, ABC):
 
         ans = self.get_input()
         if self._param.post_answers:
-            ans = pd.concat([ans, pd.DataFrame([{"content": random.choice(self._param.post_answers)}])], ignore_index=False)
+            ans = pd.concat([ans, pd.DataFrame([{"content": secrets.choice(self._param.post_answers)}])], ignore_index=False)
         return ans
 
     def stream_output(self):
@@ -68,7 +68,7 @@ class Answer(ComponentBase, ABC):
                 res = st
                 yield st
         if self._param.post_answers:
-            res["content"] += random.choice(self._param.post_answers)
+            res["content"] += secrets.choice(self._param.post_answers)
             yield res
 
         self.set_output(res)

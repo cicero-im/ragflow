@@ -13,7 +13,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-import random
 from datetime import datetime
 from elasticsearch_dsl import Q
 from peewee import fn
@@ -33,6 +32,7 @@ from api.db.services.common_service import CommonService
 from api.db.services.knowledgebase_service import KnowledgebaseService
 from api.db import StatusEnum
 from rag.utils.redis_conn import REDIS_CONN
+import secrets
 
 
 class DocumentService(CommonService):
@@ -293,7 +293,7 @@ class DocumentService(CommonService):
     @DB.connection_context()
     def begin2parse(cls, docid):
         cls.update_by_id(
-            docid, {"progress": random.random() * 1 / 100.,
+            docid, {"progress": secrets.SystemRandom().random() * 1 / 100.,
                     "progress_msg": "Task dispatched...",
                     "process_begin_at": get_format_time()
                     })

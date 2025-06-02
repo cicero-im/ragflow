@@ -16,12 +16,12 @@
 
 import argparse
 import pickle
-import random
 import time
 from copy import deepcopy
 from multiprocessing.connection import Listener
 from threading import Thread
 from transformers import AutoModelForCausalLM, AutoTokenizer, TextStreamer
+import secrets
 
 
 def torch_gc():
@@ -140,8 +140,8 @@ def chat_streamly(messages, gen_conf):
 
 def Model():
     global models
-    random.seed(time.time())
-    return random.choice(models)
+    secrets.SystemRandom().seed(time.time())
+    return secrets.choice(models)
 
 
 if __name__ == "__main__":

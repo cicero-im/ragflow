@@ -13,10 +13,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-import random
 from abc import ABC
 from functools import partial
 from agent.component.base import ComponentBase, ComponentParamBase
+import secrets
 
 
 class MessageParam(ComponentParamBase):
@@ -40,12 +40,12 @@ class Message(ComponentBase, ABC):
         if kwargs.get("stream"):
             return partial(self.stream_output)
 
-        return Message.be_output(random.choice(self._param.messages))
+        return Message.be_output(secrets.choice(self._param.messages))
 
     def stream_output(self):
         res = None
         if self._param.messages:
-            res = {"content": random.choice(self._param.messages)}
+            res = {"content": secrets.choice(self._param.messages)}
             yield res
 
         self.set_output(res)

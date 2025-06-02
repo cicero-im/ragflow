@@ -12,7 +12,6 @@
 #
 
 import os
-import random
 
 import xgboost as xgb
 from io import BytesIO
@@ -30,6 +29,7 @@ from deepdoc.vision import OCR, Recognizer, LayoutRecognizer, TableStructureReco
 from rag.nlp import rag_tokenizer
 from copy import deepcopy
 from huggingface_hub import snapshot_download
+import secrets
 
 logging.getLogger("pdfminer").setLevel(logging.WARNING)
 
@@ -978,7 +978,7 @@ class RAGFlowPdfParser:
 
         logging.info("Images converted.")
         self.is_english = [re.search(r"[a-zA-Z0-9,/¸;:'\[\]\(\)!@#$%^&*\"?<>._-]{30,}", "".join(
-            random.choices([c["text"] for c in self.page_chars[i]], k=min(100, len(self.page_chars[i]))))) for i in
+            secrets.SystemRandom().choices([c["text"] for c in self.page_chars[i]], k=min(100, len(self.page_chars[i]))))) for i in
                            range(len(self.page_chars))]
         if sum([1 if e else 0 for e in self.is_english]) > len(
                 self.page_images) / 2:
@@ -1014,7 +1014,7 @@ class RAGFlowPdfParser:
                 [c for c in self.page_chars]) and self.boxes:
             bxes = [b for bxs in self.boxes for b in bxs]
             self.is_english = re.search(r"[\na-zA-Z0-9,/¸;:'\[\]\(\)!@#$%^&*\"?<>._-]{30,}",
-                                        "".join([b["text"] for b in random.choices(bxes, k=min(30, len(bxes)))]))
+                                        "".join([b["text"] for b in secrets.SystemRandom().choices(bxes, k=min(30, len(bxes)))]))
 
         logging.info("Is it English:", self.is_english)
 
