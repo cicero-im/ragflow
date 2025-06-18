@@ -59,16 +59,16 @@ class Dealer:
 
         def load_dict(fnm):
             res = {}
-            f = open(fnm, "r")
-            while True:
-                l = f.readline()
-                if not l:
-                    break
-                arr = l.replace("\n", "").split("\t")
-                if len(arr) < 2:
-                    res[arr[0]] = 0
-                else:
-                    res[arr[0]] = int(arr[1])
+            with open(fnm, "r") as f:
+                while True:
+                    l = f.readline()
+                    if not l:
+                        break
+                    arr = l.replace("\n", "").split("\t")
+                    if len(arr) < 2:
+                        res[arr[0]] = 0
+                    else:
+                        res[arr[0]] = int(arr[1])
 
             c = 0
             for _, v in res.items():
