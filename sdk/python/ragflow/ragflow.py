@@ -19,6 +19,7 @@ import requests
 
 from api.db.services.document_service import DocumentService
 from api.settings import RetCode
+from security import safe_requests
 
 
 class RAGFlow:
@@ -49,7 +50,7 @@ class RAGFlow:
         return res.json()
 
     def find_dataset_id_by_name(self, dataset_name):
-        res = requests.get(self.dataset_url, headers=self.authorization_header)
+        res = safe_requests.get(self.dataset_url, headers=self.authorization_header)
         for dataset in res.json()["data"]:
             if dataset["name"] == dataset_name:
                 return dataset["id"]
@@ -62,13 +63,13 @@ class RAGFlow:
             "orderby": orderby,
             "desc": desc
         }
-        response = requests.get(url=self.dataset_url, params=params, headers=self.authorization_header)
+        response = safe_requests.get(url=self.dataset_url, params=params, headers=self.authorization_header)
         return response.json()
 
     def get_dataset(self, dataset_name):
         dataset_id = self.find_dataset_id_by_name(dataset_name)
         endpoint = f"{self.dataset_url}/{dataset_id}"
-        response = requests.get(endpoint, headers=self.authorization_header)
+        response = safe_requests.get(endpoint, headers=self.authorization_header)
         return response.json()
 
     def update_dataset(self, dataset_name, **params):
@@ -116,7 +117,7 @@ class RAGFlow:
             "keywords": keywords
         }
         endpoint = f"{self.dataset_url}/{dataset_id}/documents/"
-        res = requests.get(endpoint, params=params, headers=self.authorization_header)
+        res = safe_requests.get(endpoint, params=params, headers=self.authorization_header)
         return res.json()
 
     # ----------------------------update files: enable, rename, template_type-------------------------------------------
@@ -128,7 +129,7 @@ class RAGFlow:
     # ----------------------------download a file-----------------------------------------------------
     def download_file(self, dataset_id, document_id):
         endpoint = f"{self.dataset_url}/{dataset_id}/documents/{document_id}"
-        res = requests.get(endpoint, headers=self.authorization_header)
+        res = safe_requests.get(endpoint, headers=self.authorization_header)
 
         content = res.content  # binary data
         # decode the binary data
@@ -172,7 +173,7 @@ class RAGFlow:
     # ----------------------------show the status of the file-----------------------------------------------------
     def show_parsing_status(self, dataset_id, document_id):
         endpoint = f"{self.dataset_url}/{dataset_id}/documents/{document_id}/status"
-        res = requests.get(endpoint, headers=self.authorization_header)
+        res = safe_requests.get(endpoint, headers=self.authorization_header)
 
         return res.json()
     # ----------------------------list the chunks of the file-----------------------------------------------------

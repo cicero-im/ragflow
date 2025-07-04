@@ -33,6 +33,7 @@ from api.db.services.user_service import UserService, TenantService, UserTenantS
 from api.db.services.file_service import FileService
 from api.settings import stat_logger
 from api.utils.api_utils import get_json_result, cors_reponse
+from security import safe_requests
 
 
 @manager.route('/login', methods=['POST', 'GET'])
@@ -186,10 +187,9 @@ def feishu_callback():
 
 
 def user_info_from_feishu(access_token):
-    import requests
     headers = {"Content-Type": "application/json; charset=utf-8",
                'Authorization': f"Bearer {access_token}"}
-    res = requests.get(
+    res = safe_requests.get(
         f"https://open.feishu.cn/open-apis/authen/v1/user_info",
         headers=headers)
     user_info = res.json()["data"]
@@ -198,14 +198,13 @@ def user_info_from_feishu(access_token):
 
 
 def user_info_from_github(access_token):
-    import requests
     headers = {"Accept": "application/json",
                'Authorization': f"token {access_token}"}
-    res = requests.get(
+    res = safe_requests.get(
         f"https://api.github.com/user?access_token={access_token}",
         headers=headers)
     user_info = res.json()
-    email_info = requests.get(
+    email_info = safe_requests.get(
         f"https://api.github.com/user/emails?access_token={access_token}",
         headers=headers).json()
     user_info["email"] = next(

@@ -15,9 +15,9 @@
 #
 from abc import ABC
 import pandas as pd
-import requests
 from agent.settings import DEBUG
 from agent.component.base import ComponentBase, ComponentParamBase
+from security import safe_requests
 
 
 class GitHubParam(ComponentParamBase):
@@ -46,7 +46,7 @@ class GitHub(ComponentBase, ABC):
             url = 'https://api.github.com/search/repositories?q=' + ans + '&sort=stars&order=desc&per_page=' + str(
                 self._param.top_n)
             headers = {"Content-Type": "application/vnd.github+json", "X-GitHub-Api-Version": '2022-11-28'}
-            response = requests.get(url=url, headers=headers).json()
+            response = safe_requests.get(url=url, headers=headers).json()
 
             github_res = [{"content": '<a href="' + i["html_url"] + '">' + i["name"] + '</a>' + str(
                 i["description"]) + '\n stars:' + str(i['watchers'])} for i in response['items']]

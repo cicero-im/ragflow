@@ -17,10 +17,10 @@ import random
 from abc import ABC
 from functools import partial
 import pandas as pd
-import requests
 import re
 from agent.settings import DEBUG
 from agent.component.base import ComponentBase, ComponentParamBase
+from security import safe_requests
 
 
 class BaiduParam(ComponentParamBase):
@@ -49,7 +49,7 @@ class Baidu(ComponentBase, ABC):
             url = 'https://www.baidu.com/s?wd=' + ans + '&rn=' + str(self._param.top_n)
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36'}
-            response = requests.get(url=url, headers=headers)
+            response = safe_requests.get(url=url, headers=headers)
 
             url_res = re.findall(r"'url': \\\"(.*?)\\\"}", response.text)
             title_res = re.findall(r"'title': \\\"(.*?)\\\",\\n", response.text)

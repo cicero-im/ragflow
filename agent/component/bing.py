@@ -14,10 +14,10 @@
 #  limitations under the License.
 #
 from abc import ABC
-import requests
 import pandas as pd
 from agent.settings import DEBUG
 from agent.component.base import ComponentBase, ComponentParamBase
+from security import safe_requests
 
 
 class BingParam(ComponentParamBase):
@@ -62,13 +62,13 @@ class Bing(ComponentBase, ABC):
             params = {"q": ans, "textDecorations": True, "textFormat": "HTML", "cc": self._param.country,
                       "answerCount": 1, "promote": self._param.channel}
             if self._param.channel == "Webpages":
-                response = requests.get("https://api.bing.microsoft.com/v7.0/search", headers=headers, params=params)
+                response = safe_requests.get("https://api.bing.microsoft.com/v7.0/search", headers=headers, params=params)
                 response.raise_for_status()
                 search_results = response.json()
                 bing_res = [{"content": '<a href="' + i["url"] + '">' + i["name"] + '</a>    ' + i["snippet"]} for i in
                             search_results["webPages"]["value"]]
             elif self._param.channel == "News":
-                response = requests.get("https://api.bing.microsoft.com/v7.0/news/search", headers=headers,
+                response = safe_requests.get("https://api.bing.microsoft.com/v7.0/news/search", headers=headers,
                                         params=params)
                 response.raise_for_status()
                 search_results = response.json()

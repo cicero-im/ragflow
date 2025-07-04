@@ -15,8 +15,8 @@
 #
 from abc import ABC
 import pandas as pd
-import requests
 from agent.component.base import ComponentBase, ComponentParamBase
+from security import safe_requests
 
 
 class QWeatherParam(ComponentParamBase):
@@ -64,7 +64,7 @@ class QWeather(ComponentBase, ABC):
             return QWeather.be_output("")
 
         try:
-            response = requests.get(
+            response = safe_requests.get(
                 url="https://geoapi.qweather.com/v2/city/lookup?location=" + ans + "&key=" + self._param.web_apikey).json()
             if response["code"] == "200":
                 location_id = response["location"][0]["id"]
@@ -75,7 +75,7 @@ class QWeather(ComponentBase, ABC):
 
             if self._param.type == "weather":
                 url = base_url + "weather/" + self._param.time_period + "?location=" + location_id + "&key=" + self._param.web_apikey + "&lang=" + self._param.lang
-                response = requests.get(url=url).json()
+                response = safe_requests.get(url=url).json()
                 if response["code"] == "200":
                     if self._param.time_period == "now":
                         return QWeather.be_output(str(response["now"]))
@@ -91,7 +91,7 @@ class QWeather(ComponentBase, ABC):
 
             elif self._param.type == "indices":
                 url = base_url + "indices/1d?type=0&location=" + location_id + "&key=" + self._param.web_apikey + "&lang=" + self._param.lang
-                response = requests.get(url=url).json()
+                response = safe_requests.get(url=url).json()
                 if response["code"] == "200":
                     indices_res = response["daily"][0]["date"] + "\n" + "\n".join(
                         [i["name"] + ": " + i["category"] + ", " + i["text"] for i in response["daily"]])
@@ -102,7 +102,7 @@ class QWeather(ComponentBase, ABC):
 
             elif self._param.type == "airquality":
                 url = base_url + "air/now?location=" + location_id + "&key=" + self._param.web_apikey + "&lang=" + self._param.lang
-                response = requests.get(url=url).json()
+                response = safe_requests.get(url=url).json()
                 if response["code"] == "200":
                     return QWeather.be_output(str(response["now"]))
                 else:
