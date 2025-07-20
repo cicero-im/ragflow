@@ -16,9 +16,9 @@
 from abc import ABC
 from Bio import Entrez
 import pandas as pd
-import xml.etree.ElementTree as ET
 from agent.settings import DEBUG
 from agent.component.base import ComponentBase, ComponentParamBase
+import defusedxml.ElementTree
 
 
 class PubMedParam(ComponentParamBase):
@@ -47,7 +47,7 @@ class PubMed(ComponentBase, ABC):
         try:
             Entrez.email = self._param.email
             pubmedids = Entrez.read(Entrez.esearch(db='pubmed', retmax=self._param.top_n, term=ans))['IdList']
-            pubmedcnt = ET.fromstring(
+            pubmedcnt = defusedxml.ElementTree.fromstring(
                 Entrez.efetch(db='pubmed', id=",".join(pubmedids), retmode="xml").read().decode("utf-8"))
             pubmed_res = [{"content": 'Title:' + child.find("MedlineCitation").find("Article").find(
                 "ArticleTitle").text + '\nUrl:<a href=" https://pubmed.ncbi.nlm.nih.gov/' + child.find(
