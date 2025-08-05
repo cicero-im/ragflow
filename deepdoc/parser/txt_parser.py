@@ -23,7 +23,7 @@ class RAGFlowTxtParser:
         else:
             with open(fnm, "r") as f:
                 while True:
-                    l = f.readline()
+                    l = f.readline(5_000_000)
                     if not l:
                         break
                     txt += l

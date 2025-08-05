@@ -25,7 +25,7 @@ def loadRank(fnm):
     TBL["rank"] = 1000000
     with open(fnm, "r",encoding='UTF-8') as f:
         while True:
-            l = f.readline()
+            l = f.readline(5_000_000)
             if not l:break
             l = l.strip("\n").split(",")
             try:
