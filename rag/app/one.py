@@ -89,7 +89,7 @@ def chunk(filename, binary=None, from_page=0, to_page=100000,
         else:
             with open(filename, "r") as f:
                 while True:
-                    l = f.readline()
+                    l = f.readline(5_000_000)
                     if not l:
                         break
                     txt += l

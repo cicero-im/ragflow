@@ -40,7 +40,7 @@ class RagTokenizer:
         try:
             of = open(fnm, "r", encoding='utf-8')
             while True:
-                line = of.readline()
+                line = of.readline(5_000_000)
                 if not line:
                     break
                 line = re.sub(r"[\r\n]+", "", line)
@@ -433,7 +433,7 @@ if __name__ == '__main__':
     tknzr.loadUserDict(sys.argv[1])
     of = open(sys.argv[2], "r")
     while True:
-        line = of.readline()
+        line = of.readline(5_000_000)
         if not line:
             break
         print(tknzr.tokenize(line))

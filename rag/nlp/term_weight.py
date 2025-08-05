@@ -61,7 +61,7 @@ class Dealer:
             res = {}
             f = open(fnm, "r")
             while True:
-                l = f.readline()
+                l = f.readline(5_000_000)
                 if not l:
                     break
                 arr = l.replace("\n", "").split("\t")
